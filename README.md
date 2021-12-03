@@ -37,12 +37,28 @@ python main.py 192 a 254
 ```
 
 ### **Updating Code**
-If you think ping in Class A a bit too much, maybe you can change code below
+If you think ping in Class A(or B) a bit too much, let say in this code below, you will ping with prefix 192, 192.1.1.1 - 192.254.254.254 
 ```
 elif arguments[2] == "a":
     results = []
     for a in range(1, 255):
         for b in range(1, 255):
+            get_result = concurrent_action(
+                arguments[1]+"."+str(a)+"."+str(b), int(arguments[3]))
+            results.append(get_result)
+    write = open("result.txt", "w")
+    for result in results:
+        for i in result:
+            if "Up" in i:
+                write.write(i+"\n")
+    write.close()
+```
+You can update just like code below to only ping range 192.1.1.1 - 192.2.2.254
+```
+elif arguments[2] == "a":
+    results = []
+    for a in range(1, 3):
+        for b in range(1, 3):
             get_result = concurrent_action(
                 arguments[1]+"."+str(a)+"."+str(b), int(arguments[3]))
             results.append(get_result)
