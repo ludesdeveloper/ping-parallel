@@ -39,7 +39,7 @@ python main.py 192 a 254
 ### **Updating Code**
 If you think ping in Class A(or B) a bit too much, let say in this code below, you will ping with prefix 192, 192.1.1.1 - 192.254.254.254 
 
-*Take a look "1, 255"*
+*Take a look "for a in range(1, 255):" and also "for b in range(1, 255):"*
 ```
 elif arguments[2] == "a":
     results = []
