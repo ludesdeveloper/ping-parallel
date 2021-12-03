@@ -55,8 +55,8 @@ elif arguments[2] == "b":
     write.close()
 elif arguments[2] == "a":
     results = []
-    for a in range(1, 3):
-        for b in range(1, 3):
+    for a in range(1, 255):
+        for b in range(1, 255):
             get_result = concurrent_action(
                 arguments[1]+"."+str(a)+"."+str(b), int(arguments[3]))
             results.append(get_result)
