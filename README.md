@@ -35,3 +35,21 @@ python main.py 192.168 b 254
 ```
 python main.py 192 a 254
 ```
+
+### **Updating Code**
+If you think ping in Class A a bit too much, maybe you can change code below
+```
+elif arguments[2] == "a":
+    results = []
+    for a in range(1, 255):
+        for b in range(1, 255):
+            get_result = concurrent_action(
+                arguments[1]+"."+str(a)+"."+str(b), int(arguments[3]))
+            results.append(get_result)
+    write = open("result.txt", "w")
+    for result in results:
+        for i in result:
+            if "Up" in i:
+                write.write(i+"\n")
+    write.close()
+```
