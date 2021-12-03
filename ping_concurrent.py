@@ -1,24 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 
 
-def single_ping(ip_prefix, i):
-    response = subprocess.call(['ping', '-c', '1', ip_prefix+'.'+str(i)])
-    ip_status = ''
+def ping(ip_prefix, i):
+    response = subprocess.call(["ping", "-c", "1", ip_prefix+"."+str(i)])
+    ip_status = ""
     if response == 0:
-        ip_status = ip_prefix+'.'+str(i)+' is Up'
+        ip_status = ip_prefix+"."+str(i)+" is Up"
     else:
-        ip_status = ip_prefix+'.'+str(i)+' is Down'
+        ip_status = ip_prefix+"."+str(i)+" is Down"
     return ip_status
 
 
-def concurrent_action(ip_prefix):
+def concurrent_action(ip_prefix, workers):
     results = []
-    with ThreadPoolExecutor(max_workers=100) as executor:
-        futures = [executor.submit(single_ping, ip_prefix, i)
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = [executor.submit(ping, ip_prefix, i)
                    for i in range(1, 255)]
         print(futures)
         for future in futures:
@@ -28,6 +29,22 @@ def concurrent_action(ip_prefix):
                 print(e)
     for i in results:
         print(i)
+    return results
 
 
-concurrent_action('192.168.1')
+arguments = sys.argv
+if arguments[2] == "c":
+    results = concurrent_action(arguments[1], int(arguments[3]))
+    write = open("result.txt", "w")
+    for i in results:
+        write.write(i+"\n")
+    write.close()
+elif arguments[2] == "b":
+    for i in range(1, 255):
+        results = concurrent_action(arguments[1]+"."+str(i), int(arguments[3]))
+        print(results)
+elif arguments[2] == "a":
+    for a in range(1, 255):
+        for b in range(1, 255):
+            concurrent_action(arguments[1]+"." +
+                              str(a)+"."+str(b), int(arguments[3]))
